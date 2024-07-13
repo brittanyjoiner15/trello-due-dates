@@ -7,7 +7,7 @@ window.TrelloPowerUp.initialize({
         console.log(card.checklists);
         if (card.checklists.length > 0) {
             // if it has a checklist, lets look up checklist information
-            return fetch(`https://api.trello.com/1/cards/${card.id}/checklists?key=%%APP_KEY%%&token=%%APP_TOKEN%%`)
+            return fetch(`https://api.trello.com/1/cards/${card.id}/?checklists=all&key=%%APP_KEY%%&token=%%APP_TOKEN%%`)
             .then(function(response) {
                 console.log("response", response)
                 return response.json();
