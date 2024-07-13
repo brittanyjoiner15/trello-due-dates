@@ -1,0 +1,15 @@
+{
+  "name": "due-date-power-up",
+  "version": "1.0.0",
+  "description": "a power-up that looks up the next due date in a list of checklist items and sets the card due date with that date",
+  "main": "index.js",
+  "repository": "https://github.com/brittanyjoiner15/trello-due-dates.git",
+  "author": "Brittany Joiner <brittanyjoiner15@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "build": "parcel build src/html/*.html"
+  },
+  "devDependencies": {
+    "parcel-bundler": "^1.12.5"
+  }
+}
