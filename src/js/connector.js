@@ -6,11 +6,11 @@ async function updateDueDate(cardId, date) {
     const url = `https://api.trello.com/1/cards/${cardId}?due=${date}&key=%%APP_KEY%%&token=%%APP_TOKEN%%`
     try {
         const response = await fetch(url, {
-            method: 'PUT'
+            method: 'PUT',
         })
-        // if (!response.ok) {
-        //     throw new Error('Failed to update due date')
-        // }
+        if (!response.ok) {
+            throw new Error('Failed to update due date')
+        }
 
         const json = await response.json();
         console.log(json);
@@ -19,6 +19,29 @@ async function updateDueDate(cardId, date) {
     }
 
 }
+
+
+//complete due date when last checklist item is completed
+async function completeDueDate(cardId, date) {
+    console.log("updating due date", date)
+    const url = `https://api.trello.com/1/cards/${cardId}?key=%%APP_KEY%%&token=%%APP_TOKEN%%`
+    try {
+        const response = await fetch(url, {
+            method: 'PUT',
+            body: JSON.stringify({ badges: { dueComplete: true }} )
+        })
+        if (!response.ok) {
+            throw new Error('Failed to complete due date')
+        }
+
+        const json = await response.json();
+        console.log(json);
+    } catch (error) {
+        console.error(error.message);
+    }
+
+}
+
 
 window.TrelloPowerUp.initialize({
     'card-badges': function (t, opts) {
@@ -35,11 +58,20 @@ window.TrelloPowerUp.initialize({
                         .then(function (checklistData) {
                             const checklistItems = checklistData.checklists[0].checkItems;
                             const incompleteChecklistItems = checklistItems.filter(item => item.state === "incomplete");
-                            console.log("incomplete items", checklistItems.filter(item => item.state === "incomplete"))
-                            updateDueDate(card.id, incompleteChecklistItems[0].due)
-                            return [{
-                                text: incompleteChecklistItems[0].name,
-                            }]
+                            if (incompleteChecklistItems.length > 0) {
+                                console.log("incomplete items", checklistItems.filter(item => item.state === "incomplete"))
+                                updateDueDate(card.id, incompleteChecklistItems[0].due)
+                                return [{
+                                    text: incompleteChecklistItems[0].name,
+                                }]
+                            }
+
+                            if (incompleteChecklistItems.length === 0) {
+                                console.log("all items complete")
+                                completeDueDate(card.id)
+                            }
+                            
+                            return []
                         })
                 }
                 return [];
