@@ -97,8 +97,8 @@ window.TrelloPowerUp.initialize({
                         .then(function (checklistData) {
                             console.log("checklistData, checklists", checklistData.checklists)
                             const checklistItems = checklistData.checklists[0].checkItems;
-                            const allItems = extractCheckItems(checklistData.checklists)
-                            console.log("all items", allItems)
+                            const allItems = extractCheckItemsAndSort(checklistData.checklists)
+                            console.log("all items and should be sorted", allItems)
                             const incompleteChecklistItems = checklistItems.filter(item => item.state === "incomplete");
                             if (incompleteChecklistItems.length > 0) {
                                 console.log("incomplete items", checklistItems.filter(item => item.state === "incomplete"))
@@ -106,8 +106,8 @@ window.TrelloPowerUp.initialize({
                                 // get all the checklists on a card
 
                                 // get all the items from each checklist on a card and add to an array
-                                const allItems = extractCheckItemsAndSort(checklistData.checklists)
-                                console.log("all items and should be sorted", allItems)
+                                // const allItems = extractCheckItemsAndSort(checklistData.checklists)
+                                // console.log("all items and should be sorted", allItems)
                                 // sort the array by due date
 
                                 // return the first item in the array
