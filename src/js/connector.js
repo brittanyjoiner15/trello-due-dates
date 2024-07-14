@@ -63,6 +63,12 @@ async function completeDueDate(cardId, date) {
 
 }
 
+// function that takes a checklist id and returns all the checklist items in that checklist, then adds to an array
+
+
+function getCheckListItems(checklistId) {
+    return fetch(`https://api.trello.com/1/checklists/${checklistId}/checkItems?key=%%APP_KEY%%&token=%%APP_TOKEN%%`)
+}
 
 window.TrelloPowerUp.initialize({
     'card-badges': function (t, opts) {
@@ -77,12 +83,24 @@ window.TrelloPowerUp.initialize({
                             return response.json();
                         })
                         .then(function (checklistData) {
+                            console.log("checklistData, checklists", checklistData.checklists)
                             const checklistItems = checklistData.checklists[0].checkItems;
                             const incompleteChecklistItems = checklistItems.filter(item => item.state === "incomplete");
                             if (incompleteChecklistItems.length > 0) {
                                 console.log("incomplete items", checklistItems.filter(item => item.state === "incomplete"))
+                                console.log("earliest due", checklistItems.badges.checkItemsEarliestDue)
+                                // get all the checklists on a card
+
+                                // get all the items from each checklist on a card and add to an array
+
+                                // sort the array by due date
+
+                                // return the first item in the array
                                 updateDueDate(card.id, incompleteChecklistItems[0].due)
-                                return [ createBadge(incompleteChecklistItems[0].due, "red", "date"), createBadge(incompleteChecklistItems[0].name, "blue", "next") ] 
+
+                                return [ 
+                                    // createBadge(incompleteChecklistItems[0].due, "red", "date"), 
+                                    createBadge(incompleteChecklistItems[0].name, "blue", "next") ] 
                             }
 
                             if (incompleteChecklistItems.length === 0) {
