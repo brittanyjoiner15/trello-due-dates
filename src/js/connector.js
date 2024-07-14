@@ -72,7 +72,11 @@ function extractCheckItemsAndSort(arr) {
       return acc;
     }, []);
 
-    const sortedItems = extractedItems.sort((a, b) => new Date(a.due) - new Date(b.due));
+    const sortedItems =  extractedItems.sort((a, b) => {
+        if (a.due === null) return 1;
+        if (b.due === null) return -1;
+        return new Date(a.due) - new Date(b.due);
+      });
 
     return sortedItems;
   }
