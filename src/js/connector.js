@@ -12,9 +12,8 @@ window.TrelloPowerUp.initialize({
                 return response.json();
             })
             .then(function(checklistData) {
-                console.log("checklist data coming!")
-                console.log(checklistData.filter(item => item.state === "incomplete"));
-                return checklistData;
+                console.log(checklistData);
+                return [];
             })
         }
 
