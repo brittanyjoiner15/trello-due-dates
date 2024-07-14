@@ -1,5 +1,25 @@
 console.log("Im building a powerup!")
 
+// function to update the due date with the next items due date
+async function updateDueDate(cardId, date) {
+    console.log("updating due date", date)
+    const url = `https://api.trello.com/1/cards/${cardId}?due=${date}&key=%%APP_KEY%%&token=%%APP_TOKEN%%`
+    try {
+        const response = await fetch(url, {
+            method: 'PUT'
+        })
+        // if (!response.ok) {
+        //     throw new Error('Failed to update due date')
+        // }
+
+        const json = await response.json();
+        console.log(json);
+    } catch (error) {
+        console.error(error.message);
+    }
+
+}
+
 window.TrelloPowerUp.initialize({
     'card-badges': function (t, opts) {
         return t.card('all')
@@ -16,12 +36,12 @@ window.TrelloPowerUp.initialize({
                             const checklistItems = checklistData.checklists[0].checkItems;
                             const incompleteChecklistItems = checklistItems.filter(item => item.state === "incomplete");
                             console.log("incomplete items", checklistItems.filter(item => item.state === "incomplete"))
+                            updateDueDate(card.id, incompleteChecklistItems[0].due)
                             return [{
                                 text: incompleteChecklistItems[0].name,
                             }]
                         })
                 }
-
                 return [];
             });
     }
