@@ -24,11 +24,10 @@ async function updateDueDate(cardId, date) {
 //complete due date when last checklist item is completed
 async function completeDueDate(cardId, date) {
     console.log("updating due date", date)
-    const url = `https://api.trello.com/1/cards/${cardId}?key=%%APP_KEY%%&token=%%APP_TOKEN%%`
+    const url = `https://api.trello.com/1/cards/${cardId}?dueComplete=true&key=%%APP_KEY%%&token=%%APP_TOKEN%%`
     try {
         const response = await fetch(url, {
             method: 'PUT',
-            body: JSON.stringify({ badges: { dueComplete: true }} )
         })
         if (!response.ok) {
             throw new Error('Failed to complete due date')
@@ -66,10 +65,7 @@ window.TrelloPowerUp.initialize({
                                 }]
                             }
 
-                            if (incompleteChecklistItems.length === 0) {
-                                console.log("all items complete")
-                                completeDueDate(card.id)
-                            }
+                            
                             
                             return []
                         })
