@@ -1,5 +1,18 @@
 console.log("Im building a powerup!")
 
+const dateIcon = "https://storage.googleapis.com/due-date-power-up/due%20date%20power-up%20icon%20(1).png"
+const nextItemIcon = "https://storage.googleapis.com/due-date-power-up/nextItem.png"
+
+
+// define badge object
+function createBadge(text, color, type) {
+    return {
+        text: text,
+        color: color,
+        url: type === "date" ? dateIcon : nextItemIcon
+    }
+}
+
 // function to update the due date with the next items due date
 async function updateDueDate(cardId, date) {
     console.log("updating due date", date)
@@ -60,17 +73,13 @@ window.TrelloPowerUp.initialize({
                             if (incompleteChecklistItems.length > 0) {
                                 console.log("incomplete items", checklistItems.filter(item => item.state === "incomplete"))
                                 updateDueDate(card.id, incompleteChecklistItems[0].due)
-                                return [{
-                                    text: incompleteChecklistItems[0].name,
-                                }]
+                                return [ createBadge(incompleteChecklistItems[0].due, "red", "date"), createBadge(incompleteChecklistItems[0].name, "blue", "next") ] 
                             }
 
                             if (incompleteChecklistItems.length === 0) {
                                 console.log("all items complete")
                                 completeDueDate(card.id)
-                                return [{
-                                    text: "All items complete",
-                                }]
+                                return [createBadge("All items complete", "green", "date")]
                             }
                             
                             
