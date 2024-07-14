@@ -93,10 +93,12 @@ window.TrelloPowerUp.initialize({
                         .then(function (checklistData) {
                             console.log("checklistData, checklists", checklistData.checklists)
                             const checklistItems = checklistData.checklists[0].checkItems;
+                            const allItems = extractCheckItems(checklistData.checklists)
+                            console.log("all items", allItems)
                             const incompleteChecklistItems = checklistItems.filter(item => item.state === "incomplete");
                             if (incompleteChecklistItems.length > 0) {
                                 console.log("incomplete items", checklistItems.filter(item => item.state === "incomplete"))
-                                console.log("earliest due", checklistItems.badges.checkItemsEarliestDue)
+                                // console.log("earliest due", checklistItems.badges.checkItemsEarliestDue)
                                 // get all the checklists on a card
 
                                 // get all the items from each checklist on a card and add to an array
