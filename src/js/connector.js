@@ -3,13 +3,22 @@ console.log("Im building a powerup!")
 const dateIcon = "https://storage.googleapis.com/due-date-power-up/due%20date%20power-up%20icon%20(1).png"
 const nextItemIcon = "https://storage.googleapis.com/due-date-power-up/nextItem.png"
 
+// write a function that takes a timestamp and returns a string in the format "MM/DD/YYYY"
+function formatDate(timestamp) {
+    const date = new Date(timestamp);
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    const year = date.getFullYear();
+    return `${month}/${day}/${year}`;
+}
+
 
 // define badge object
 function createBadge(text, color, type) {
     return {
-        text: text,
+        text: type === `date` ? formatDate(text) : text,
         color: color,
-        url: type === "date" ? dateIcon : nextItemIcon
+        icon: type === "date" ? dateIcon : nextItemIcon
     }
 }
 
