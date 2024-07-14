@@ -45,7 +45,7 @@ async function updateDueDate(cardId, date) {
 // function to update the member with the next items member
 async function updateMember(cardId, memberId) {
     console.log("updating member", memberId)
-    const url = `https://api.trello.com/1/cards/${cardId}?idMembers=${memberId}&key=%%APP_KEY%%&token=%%APP_TOKEN%%`
+    const url = `https://api.trello.com/1/cards/${cardId}/idMembers?value=${memberId}&key=%%APP_KEY%%&token=%%APP_TOKEN%%`
     try {
         const response = await fetch(url, {
             method: 'POST',
