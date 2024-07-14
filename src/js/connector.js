@@ -55,9 +55,9 @@ async function updateMember(cardId, memberId) {
         }
 
         const json = await response.json();
-        console.log(json);
+        console.log("json response", json);
     } catch (error) {
-        console.error(error.message);
+        console.error("error", error);
     }
 
 }
