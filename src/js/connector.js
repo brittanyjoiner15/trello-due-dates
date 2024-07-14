@@ -13,7 +13,7 @@ window.TrelloPowerUp.initialize({
                 return response.json();
             })
             .then(function(checklistData) {
-                console.log("checklistdata", checklistData);
+                console.log("checklistdata", checklistData.checklists[0].checkItems);
                 return [];
             })
         }
