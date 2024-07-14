@@ -98,31 +98,26 @@ window.TrelloPowerUp.initialize({
                             console.log("response", response)
                             return response.json();
                         })
-                        .then(function (checklistData) {
-                            console.log("checklistData, checklists", checklistData.checklists)
-                            const checklistItems = checklistData.checklists[0].checkItems;
-                            const allItems = extractCheckItemsAndSort(checklistData.checklists)
-                            console.log("all items and should be sorted", allItems)
-                            const incompleteChecklistItems = checklistItems.filter(item => item.state === "incomplete");
-                            if (incompleteChecklistItems.length > 0) {
-                                console.log("incomplete items", checklistItems.filter(item => item.state === "incomplete"))
-                                // console.log("earliest due", checklistItems.badges.checkItemsEarliestDue)
-                                // get all the checklists on a card
-
-                                // get all the items from each checklist on a card and add to an array
-                                // const allItems = extractCheckItemsAndSort(checklistData.checklists)
-                                // console.log("all items and should be sorted", allItems)
-                                // sort the array by due date
-
-                                // return the first item in the array
-                                updateDueDate(card.id, incompleteChecklistItems[0].due)
-
+                        .then(function (checklistData) {                                                    
+                            const allItems = extractCheckItemsAndSort(checklistData.checklists)                            
+                            const allIncompleteItems = allItems.filter(item => item.state === "incomplete")
+                            if (allIncompleteItems.length > 0 && allIncompleteItems[0].due) {
+                                updateDueDate(card.id, allIncompleteItems[0].due)
+                                // also update the member if there is one
+                                // if(allIncompleteItems[0].idMembers.length > 0) {
+                                //     updateMember(card.id, allIncompleteItems[0].idMembers)
+                                // }
+                                console.log("next due item name", allIncompleteItems[0].name)                                                                
+                                console.log("next due item member", allIncompleteItems[0].idMember)                                                                
                                 return [ 
                                     // createBadge(incompleteChecklistItems[0].due, "red", "date"), 
-                                    createBadge(incompleteChecklistItems[0].name, "blue", "next") ] 
+                                    createBadge(allIncompleteItems[0].due, "red", "date"),
+                                    // createBadge(allIncompleteItems[0].name, "blue", "item"),
+                                    // createBadge(allIncompleteItems[0].idMember, "green", "item")
+                                ] 
                             }
 
-                            if (incompleteChecklistItems.length === 0) {
+                            if (allIncompleteItems.length === 0) {
                                 console.log("all items complete")
                                 completeDueDate(card.id)
                                 return [createBadge("All items complete", "green", "date")]
