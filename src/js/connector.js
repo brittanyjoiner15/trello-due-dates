@@ -139,7 +139,7 @@ window.TrelloPowerUp.initialize({
                             if (allIncompleteItems.length === 0) {
                                 console.log("all items complete")
                                 completeDueDate(card.id)
-                                return [createBadge("All items complete", "green", "date")]
+                                return [createBadge("All items complete", "green", "notDate")]
                             }
                             
                             
