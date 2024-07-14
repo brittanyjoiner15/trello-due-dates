@@ -65,6 +65,13 @@ window.TrelloPowerUp.initialize({
                                 }]
                             }
 
+                            if (incompleteChecklistItems.length === 0) {
+                                console.log("all items complete")
+                                completeDueDate(card.id)
+                                return [{
+                                    text: "All items complete",
+                                }]
+                            }
                             
                             
                             return []
