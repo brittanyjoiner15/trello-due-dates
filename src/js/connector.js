@@ -124,8 +124,8 @@ window.TrelloPowerUp.initialize({
                             if (allIncompleteItems.length > 0 && allIncompleteItems[0].due) {
                                 updateDueDate(card.id, allIncompleteItems[0].due)
                                 // also update the member if there is one
-                                if(allIncompleteItems[0].idMembers) {
-                                    updateMember(card.id, allIncompleteItems[0].idMembers)
+                                if(allIncompleteItems[0].idMember) {
+                                    updateMember(card.id, allIncompleteItems[0].idMember)
                                 }
                                 console.log("next due item name", allIncompleteItems[0].name)                                                                
                                 console.log("next due item member", allIncompleteItems[0].idMember)                                                                
