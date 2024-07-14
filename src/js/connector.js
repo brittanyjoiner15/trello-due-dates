@@ -64,13 +64,17 @@ async function completeDueDate(cardId, date) {
 }
 
 // function to get all checklist items on a card
-function extractCheckItems(arr) {
-    return arr.reduce((acc, obj) => {
+function extractCheckItemsAndSort(arr) {
+    const extractedItems = arr.reduce((acc, obj) => {
       if (obj.checkItems && Array.isArray(obj.checkItems)) {
         acc.push(...obj.checkItems);
       }
       return acc;
     }, []);
+
+    const sortedItems = extractedItems.sort((a, b) => new Date(a.due) - new Date(b.due));
+
+    return sortedItems;
   }
 
 
@@ -102,8 +106,8 @@ window.TrelloPowerUp.initialize({
                                 // get all the checklists on a card
 
                                 // get all the items from each checklist on a card and add to an array
-                                const allItems = extractCheckItems(checklistData.checklists)
-                                console.log("all items", allItems)
+                                const allItems = extractCheckItemsAndSort(checklistData.checklists)
+                                console.log("all items and should be sorted", allItems)
                                 // sort the array by due date
 
                                 // return the first item in the array
