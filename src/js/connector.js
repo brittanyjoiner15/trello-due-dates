@@ -42,6 +42,26 @@ async function updateDueDate(cardId, date) {
 
 }
 
+// function to update the member with the next items member
+async function updateMember(cardId, memberId) {
+    console.log("updating member", memberId)
+    const url = `https://api.trello.com/1/cards/${cardId}?idMembers=${memberId}&key=%%APP_KEY%%&token=%%APP_TOKEN%%`
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+        })
+        if (!response.ok) {
+            throw new Error('Failed to update member')
+        }
+
+        const json = await response.json();
+        console.log(json);
+    } catch (error) {
+        console.error(error.message);
+    }
+
+}
+
 
 //complete due date when last checklist item is completed
 async function completeDueDate(cardId, date) {
@@ -104,16 +124,15 @@ window.TrelloPowerUp.initialize({
                             if (allIncompleteItems.length > 0 && allIncompleteItems[0].due) {
                                 updateDueDate(card.id, allIncompleteItems[0].due)
                                 // also update the member if there is one
-                                // if(allIncompleteItems[0].idMembers.length > 0) {
-                                //     updateMember(card.id, allIncompleteItems[0].idMembers)
-                                // }
+                                if(allIncompleteItems[0].idMembers.length > 0) {
+                                    updateMember(card.id, allIncompleteItems[0].idMembers)
+                                }
                                 console.log("next due item name", allIncompleteItems[0].name)                                                                
                                 console.log("next due item member", allIncompleteItems[0].idMember)                                                                
-                                return [ 
-                                    // createBadge(incompleteChecklistItems[0].due, "red", "date"), 
+                                return [                                 
                                     createBadge(allIncompleteItems[0].due, "red", "date"),
-                                    // createBadge(allIncompleteItems[0].name, "blue", "item"),
-                                    // createBadge(allIncompleteItems[0].idMember, "green", "item")
+                                    createBadge(allIncompleteItems[0].name, "blue", "item"),
+                                    createBadge(allIncompleteItems[0].idMember, "green", "item")
                                 ] 
                             }
 
