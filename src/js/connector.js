@@ -16,7 +16,7 @@ function formatDate(timestamp) {
 // define badge object
 function createBadge(text, color, type) {
     return {
-        text: type === `date` ? formatDate(text) : text,
+        text: type === "date" ? formatDate(text) : `NEXT 👉 ${text}`,
         color: color,
         icon: type === "date" ? dateIcon : nextItemIcon
     }
@@ -42,7 +42,7 @@ async function updateDueDate(cardId, date) {
 
 }
 
-// function to update the member with the next items member
+// function to update the member with the next items member ✅
 async function updateMember(cardId, memberId) {
     console.log("updating member", memberId)
     const url = `https://api.trello.com/1/cards/${cardId}/idMembers?value=${memberId}&key=%%APP_KEY%%&token=%%APP_TOKEN%%`
@@ -63,7 +63,7 @@ async function updateMember(cardId, memberId) {
 }
 
 
-//complete due date when last checklist item is completed
+//complete due date when last checklist item is completed ✅
 async function completeDueDate(cardId, date) {
     console.log("updating due date", date)
     const url = `https://api.trello.com/1/cards/${cardId}?dueComplete=true&key=%%APP_KEY%%&token=%%APP_TOKEN%%`
@@ -130,9 +130,7 @@ window.TrelloPowerUp.initialize({
                                 console.log("next due item name", allIncompleteItems[0].name)                                                                
                                 console.log("next due item member", allIncompleteItems[0].idMember)                                                                
                                 return [                                 
-                                    createBadge(allIncompleteItems[0].due, "red", "date"),
                                     createBadge(allIncompleteItems[0].name, "blue", "item"),
-                                    createBadge(allIncompleteItems[0].idMember, "green", "item")
                                 ] 
                             }
 
