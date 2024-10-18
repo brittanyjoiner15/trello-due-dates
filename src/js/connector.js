@@ -22,6 +22,15 @@ function createBadge(text, color, type) {
     }
 }
 
+// try out t.get: https://api.trello.com/1/checklists/${checklistId}/checkItems?key=%%APP_KEY%%&token=%%APP_TOKEN%%
+function testGet() {
+    return t.get(cardId, 'shared', 'checklists','uh oh not set')
+        .then(function (data) {
+            console.log("trying to run the t.get")
+        console.log(JSON.stringify(data, null, 2));
+        });
+}
+
 // function to update the due date with the next items due date
 async function updateDueDate(cardId, date) {
     console.log("updating due date", date)
@@ -113,6 +122,7 @@ window.TrelloPowerUp.initialize({
                 console.log(card.checklists);
                 if (card.checklists.length > 0) {
                     // if it has a checklist, lets look up checklist information
+                    console.log(testGet());
                     return fetch(`https://api.trello.com/1/cards/${card.id}/?checklists=all&key=%%APP_KEY%%&token=%%APP_TOKEN%%`)
                         .then(function (response) {
                             console.log("response", response)
