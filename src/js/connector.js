@@ -26,7 +26,7 @@ function createBadge(text, color, type) {
 function testGet() {
     return t.get(cardId, 'shared', 'checklists','uh oh not set')
         .then(function (data) {
-            console.log("trying to run the t.get")
+            console.log("trying to run the t.get");
         console.log(JSON.stringify(data, null, 2));
         });
 }
