@@ -17,7 +17,7 @@ var authenticationFailure = function () {
 
 var onBtnClick = function (t, opts) {
     console.log('Someone clicked the button');
-    console.log(window.Trello);
+    console.log(window.Trello.authorize);
 };
 
 // authorize flow
@@ -151,17 +151,17 @@ function getCheckListItems(checklistId) {
     return fetch(`https://api.trello.com/1/checklists/${checklistId}/checkItems?key=%%APP_KEY%%&token=%%APP_TOKEN%%`)
 }
 
-// window.Trello.authorize({
-//     type: 'popup',
-//     name: 'Due Date Auth Test',
-//     scope: {
-//         read: 'true',
-//         write: 'true'
-//     },
-//     expiration: 'never',
-//     success: authenticationSuccess,
-//     error: authenticationFailure
-// });
+window.Trello.authorize({
+    type: 'popup',
+    name: 'Due Date Auth Test',
+    scope: {
+        read: 'true',
+        write: 'true'
+    },
+    expiration: 'never',
+    success: authenticationSuccess,
+    error: authenticationFailure
+});
 
 
 window.TrelloPowerUp.initialize({
