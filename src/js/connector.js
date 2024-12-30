@@ -17,6 +17,7 @@ var authenticationFailure = function () {
 
 var onBtnClick = function (t, opts) {
     console.log('Someone clicked the button');
+    console.log(window.Trello);
 };
 
 // authorize flow
@@ -168,8 +169,8 @@ window.TrelloPowerUp.initialize({
         return t.card('all')
             .then(function (card) {
                 console.log(card.checklists);
-                authorizeFlow();
-                console.log("testing auth flow", authorizeFlow);
+                // authorizeFlow();
+                // console.log("testing auth flow", authorizeFlow);
                 if (card.checklists.length > 0) {
                     // if it has a checklist, lets look up checklist information
                     return fetch(`https://api.trello.com/1/cards/${card.id}/?checklists=all&key=%%APP_KEY%%&token=%%APP_TOKEN%%`)
