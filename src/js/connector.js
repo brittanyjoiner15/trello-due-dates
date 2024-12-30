@@ -2,6 +2,35 @@ console.log("Im building a powerup!")
 
 const dateIcon = "https://storage.googleapis.com/due-date-power-up/due%20date%20power-up%20icon%20(1).png"
 const nextItemIcon = "https://storage.googleapis.com/due-date-power-up/nextItem.png"
+const trelloAppName = 'Due%20Dates%20from%20Checklist';
+
+// authorize flow
+export const authorizeFlow = async function (licenseContext) {
+    if (navigator.cookieEnabled) {
+        licenseContext.trelloIframeContext.getRestApi().authorize({ scope: 'read,write' })
+            .then(function (t) {
+                console.log('Power-Up was authorized with Trello');
+                if (t) {
+                    licenseContext.setAuthorizeStatus(true);
+                }
+            });
+    } else {
+        // if a user disabled third-party cookies, we cannot call the getRestApi() library and we need to handle get and set of the token
+        const url = `https://trello.com/1/authorize?name=${trelloAppName}&scope=read,write&response_type=token&key=%%APP_KEY%%&response_type=token&callback_method=postMessage&return_url=${window.origin}`;
+        const t = window.TrelloPowerUp.iframe();
+
+        const authorizeOpts = {
+            windowCallback: function (authorizeWindow) {
+                // This callback gets called with the handle to the authorization window
+                window.addEventListener('message', async function (event) {
+                    await authHandler(event, authorizeWindow, licenseContext, t);
+                }, false);
+            }
+        };
+
+        t.authorize(url, authorizeOpts);
+    }
+};
 
 // write a function that takes a timestamp and returns a string in the format "MM/DD/YYYY"
 function formatDate(timestamp) {
@@ -86,31 +115,34 @@ async function completeDueDate(cardId, date) {
 // function to get all checklist items on a card
 function extractCheckItemsAndSort(arr) {
     const extractedItems = arr.reduce((acc, obj) => {
-      if (obj.checkItems && Array.isArray(obj.checkItems)) {
-        acc.push(...obj.checkItems);
-      }
-      return acc;
+        if (obj.checkItems && Array.isArray(obj.checkItems)) {
+            acc.push(...obj.checkItems);
+        }
+        return acc;
     }, []);
 
-    const sortedItems =  extractedItems.sort((a, b) => {
+    const sortedItems = extractedItems.sort((a, b) => {
         if (a.due === null) return 1;
         if (b.due === null) return -1;
         return new Date(a.due) - new Date(b.due);
-      });
+    });
 
     return sortedItems;
-  }
+}
 
 
 function getCheckListItems(checklistId) {
     return fetch(`https://api.trello.com/1/checklists/${checklistId}/checkItems?key=%%APP_KEY%%&token=%%APP_TOKEN%%`)
 }
 
+
 window.TrelloPowerUp.initialize({
     'card-badges': function (t, opts) {
         return t.card('all')
             .then(function (card) {
                 console.log(card.checklists);
+                authorizeFlow();
+                console.log("testing auth flow", authorizeFlow);
                 if (card.checklists.length > 0) {
                     // if it has a checklist, lets look up checklist information
                     return fetch(`https://api.trello.com/1/cards/${card.id}/?checklists=all&key=%%APP_KEY%%&token=%%APP_TOKEN%%`)
@@ -118,20 +150,20 @@ window.TrelloPowerUp.initialize({
                             console.log("response", response)
                             return response.json();
                         })
-                        .then(function (checklistData) {                                                    
-                            const allItems = extractCheckItemsAndSort(checklistData.checklists)                            
+                        .then(function (checklistData) {
+                            const allItems = extractCheckItemsAndSort(checklistData.checklists)
                             const allIncompleteItems = allItems.filter(item => item.state === "incomplete")
                             if (allIncompleteItems.length > 0 && allIncompleteItems[0].due) {
                                 updateDueDate(card.id, allIncompleteItems[0].due)
                                 // also update the member if there is one
-                                if(allIncompleteItems[0].idMember) {
+                                if (allIncompleteItems[0].idMember) {
                                     updateMember(card.id, allIncompleteItems[0].idMember)
                                 }
-                                console.log("next due item name", allIncompleteItems[0].name)                                                                
-                                console.log("next due item member", allIncompleteItems[0].idMember)                                                                
-                                return [                                 
+                                console.log("next due item name", allIncompleteItems[0].name)
+                                console.log("next due item member", allIncompleteItems[0].idMember)
+                                return [
                                     createBadge(allIncompleteItems[0].name, "blue", "item"),
-                                ] 
+                                ]
                             }
 
                             if (allIncompleteItems.length === 0) {
@@ -139,8 +171,8 @@ window.TrelloPowerUp.initialize({
                                 completeDueDate(card.id)
                                 return [createBadge("All items complete", "green", "notDate")]
                             }
-                            
-                            
+
+
                             return []
                         })
                 }
