@@ -152,7 +152,7 @@ function getCheckListItems(checklistId) {
 
 window.Trello.authorize({
     type: 'popup',
-    name: 'Due Date Auth Test',
+    name: trelloAppName,
     scope: {
         read: 'true',
         write: 'true'
