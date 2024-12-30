@@ -3,6 +3,8 @@ console.log("Im building a powerup!")
 const dateIcon = "https://storage.googleapis.com/due-date-power-up/due%20date%20power-up%20icon%20(1).png"
 const nextItemIcon = "https://storage.googleapis.com/due-date-power-up/nextItem.png"
 const trelloAppName = 'Due%20Dates%20from%20Checklist';
+const WHITE_ICON = 'https://cdn.hyperdev.com/us-east-1%3A3d31b21c-01a0-4da2-8827-4bc6e88b7618%2Ficon-white.svg';
+const BLACK_ICON = 'https://cdn.hyperdev.com/us-east-1%3A3d31b21c-01a0-4da2-8827-4bc6e88b7618%2Ficon-black.svg';
 
 
 var authenticationSuccess = function () {
@@ -11,6 +13,10 @@ var authenticationSuccess = function () {
 
 var authenticationFailure = function () {
     console.log('Failed authentication');
+};
+
+var onBtnClick = function (t, opts) {
+    console.log('Someone clicked the button');
 };
 
 // authorize flow
@@ -144,18 +150,17 @@ function getCheckListItems(checklistId) {
     return fetch(`https://api.trello.com/1/checklists/${checklistId}/checkItems?key=%%APP_KEY%%&token=%%APP_TOKEN%%`)
 }
 
-window.Trello.authorize({
-    type: 'popup',
-    name: 'Due Date Auth Test',
-    scope: {
-        read: 'true',
-        write: 'true'
-    },
-    expiration: 'never',
-    success: authenticationSuccess,
-    error: authenticationFailure
-});
-console.log("trello object", window.Trello);
+// window.Trello.authorize({
+//     type: 'popup',
+//     name: 'Due Date Auth Test',
+//     scope: {
+//         read: 'true',
+//         write: 'true'
+//     },
+//     expiration: 'never',
+//     success: authenticationSuccess,
+//     error: authenticationFailure
+// });
 
 
 window.TrelloPowerUp.initialize({
@@ -200,6 +205,29 @@ window.TrelloPowerUp.initialize({
                 }
                 return [];
             });
+    },
+    'board-buttons': function (t, opts) {
+        return [{
+            // we can either provide a button that has a callback function
+            icon: {
+                dark: WHITE_ICON,
+                light: BLACK_ICON
+            },
+            text: 'Callback',
+            callback: onBtnClick,
+            condition: 'edit'
+        }, {
+            // or we can also have a button that is just a simple url
+            // clicking it will open a new tab at the provided url
+            icon: {
+                dark: WHITE_ICON,
+                light: BLACK_ICON
+            },
+            text: 'URL',
+            condition: 'always',
+            url: 'https://trello.com/inspiration',
+            target: 'Inspiring Boards' // optional target for above url
+        }];
     }
 });
 
