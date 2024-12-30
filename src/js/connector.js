@@ -1,11 +1,11 @@
-console.log("Im building a powerup!")
-
 const dateIcon = "https://storage.googleapis.com/due-date-power-up/due%20date%20power-up%20icon%20(1).png"
 const nextItemIcon = "https://storage.googleapis.com/due-date-power-up/nextItem.png"
 const trelloAppName = 'Due%20Dates%20from%20Checklist';
 const WHITE_ICON = 'https://cdn.hyperdev.com/us-east-1%3A3d31b21c-01a0-4da2-8827-4bc6e88b7618%2Ficon-white.svg';
 const BLACK_ICON = 'https://cdn.hyperdev.com/us-east-1%3A3d31b21c-01a0-4da2-8827-4bc6e88b7618%2Ficon-black.svg';
 
+
+console.log("Im building a powerup!")
 
 var authenticationSuccess = function () {
     console.log('Successful authentication');
@@ -17,7 +17,6 @@ var authenticationFailure = function () {
 
 var onBtnClick = function (t, opts) {
     console.log('Someone clicked the button');
-    console.log(window.Trello.authorize);
 };
 
 // authorize flow
