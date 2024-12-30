@@ -4,6 +4,15 @@ const dateIcon = "https://storage.googleapis.com/due-date-power-up/due%20date%20
 const nextItemIcon = "https://storage.googleapis.com/due-date-power-up/nextItem.png"
 const trelloAppName = 'Due%20Dates%20from%20Checklist';
 
+
+var authenticationSuccess = function () {
+    console.log('Successful authentication');
+};
+
+var authenticationFailure = function () {
+    console.log('Failed authentication');
+};
+
 // authorize flow
 export const authorizeFlow = async function (licenseContext) {
     if (navigator.cookieEnabled) {
@@ -134,6 +143,19 @@ function extractCheckItemsAndSort(arr) {
 function getCheckListItems(checklistId) {
     return fetch(`https://api.trello.com/1/checklists/${checklistId}/checkItems?key=%%APP_KEY%%&token=%%APP_TOKEN%%`)
 }
+
+window.Trello.authorize({
+    type: 'popup',
+    name: 'Due Date Auth Test',
+    scope: {
+        read: 'true',
+        write: 'true'
+    },
+    expiration: 'never',
+    success: authenticationSuccess,
+    error: authenticationFailure
+});
+console.log("trello object", window.Trello);
 
 
 window.TrelloPowerUp.initialize({
